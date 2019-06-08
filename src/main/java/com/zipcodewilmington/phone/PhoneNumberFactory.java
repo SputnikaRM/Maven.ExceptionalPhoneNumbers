@@ -4,6 +4,7 @@ import com.zipcodewilmington.exceptions.InvalidPhoneNumberFormatException;
 import com.zipcodewilmington.tools.RandomNumberFactory;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -13,7 +14,7 @@ public final class PhoneNumberFactory {
     private static final Logger logger = Logger.getGlobal();
 
     private PhoneNumberFactory() {
-        /** This constructor is private
+        /* This constructor is private
          *  This class is uninstantiable */
     }
 
@@ -22,8 +23,13 @@ public final class PhoneNumberFactory {
      * @return array of randomly generated PhoneNumber objects
      */ //TODO - Implement logic
     public static PhoneNumber[] createRandomPhoneNumberArray(int phoneNumberCount) {
+        PhoneNumber [] inArray = new PhoneNumber [phoneNumberCount];
+        for (int x =0; x< phoneNumberCount; x++){
+            inArray[x] = createRandomPhoneNumber();
 
-        return null;
+        }
+
+        return inArray;
     }
 
     /**
@@ -44,12 +50,14 @@ public final class PhoneNumberFactory {
      * @return a new phone number object
      */ //TODO - if input is valid, return respective PhoneNumber object, else return null
     public static PhoneNumber createPhoneNumberSafely(int areaCode, int centralOfficeCode, int phoneLineCode) {
+        String num = "(" + areaCode + ")-" + centralOfficeCode + "-" + phoneLineCode + "";
         try {
-            String num = "(" + areaCode + " )-" + centralOfficeCode + "-" + phoneLineCode + "";
+
             return createPhoneNumber(num);
         }
         catch (InvalidPhoneNumberFormatException e){
             System.out.println("There seems to be a problem.");
+            logger.log(Level.INFO, num + " is not a valid phone number");
             return null;
         }
 
@@ -62,6 +70,7 @@ public final class PhoneNumberFactory {
      */ // TODO - Add throws statement to method signature
     public static PhoneNumber createPhoneNumber(String phoneNumberString) throws InvalidPhoneNumberFormatException {
                 PhoneNumber number = new PhoneNumber(phoneNumberString);
+                logger.log(Level.INFO, "Attempting to create a new PhoneNumber object with a value of" + number);
         return number;
     }
 }
